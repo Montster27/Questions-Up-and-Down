@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions Up & Down</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1> Stack Snapshot</h1>
+        <h3>Questions up & down, start with where the idea came from and then work up and down the stack</h3>
+
+        <div class="model-selector">
+            <label for="industry-model">Industry Framework:</label>
+            <select id="industry-model" onchange="switchIndustryModel()">
+                <option value="software">Software</option>
+                <option value="biotech">Biotech</option>
+                <option value="hardware">Consumer Hardware</option>
+                <option value="fintech">Fintech</option>
+            </select>
+        </div>
+
+        <div class="column-headers">
+            <div class="question-label-header"></div>
+            <div class="input-header">
+                <span>What do you know?</span>
+            </div>
+            <div class="input-header">
+                <span>How do you know?</span>
+                <button id="toggle-input-mode" class="toggle-btn" onclick="toggleInputMode()">
+                    Switch to Options
+                </button>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>WORLD IMPACT</strong><br>
+                    <span class="question-text">What is the global impact?<br>
+                    When you exit, what lasting impact have you made?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="world-impact-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="world-impact-how" placeholder="This is placeholder text." class="text-input"></textarea>
+                    <div id="world-impact-how-options" class="checkbox-options" style="display: none;">
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="seems logical" data-field="world-impact-how">
+                            <span>Seems logical</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="based on my experience" data-field="world-impact-how">
+                            <span>Based on my experience</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="customer interviews" data-field="world-impact-how">
+                            <span>Customer interviews</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="based on industry research" data-field="world-impact-how">
+                            <span>Based on industry research</span>
+                        </label>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" value="based on industry research" data-field="world-impact-how">
+                            <span>Prototype tests</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>EXIT</strong><br>
+                    <span class="question-text">What is the end goal of the company?<br>
+                    Will you go public, be acquired, license, etc.?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="exit-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="exit-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>SECTOR MAPPING</strong><br>
+                    <span class="question-text">Describe the relationship between players in the industry 2 degrees from where you expect to be?<br>
+                    How will they respond?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="sector-mapping-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="sector-mapping-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>COMPETITIVE MARKET</strong><br>
+                    <span class="question-text">Who are the competitors that<br>
+                    sell the same/similar products? What do the users do now?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="competitive-market-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="competitive-market-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>MARKET EXPANSION</strong><br>
+                    <span class="question-text">What are follow-on or complementary products your
+                    company can offer? Long term what products and services will you offer?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="product-expansion-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="product-expansion-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>COMPANY</strong><br>
+                    <span class="question-text">What size and type of company would<br>
+                    be needed to support the business model?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="company-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="company-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>BUSINESS MODEL</strong><br>
+                    <span class="question-text">How will this make money?<br>
+                    How will customers pay for it?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="business-model-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="business-model-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>CUSTOMER SEGMENT</strong><br>
+                    <span class="question-text">Define and describe the target customers.<br>
+                    Who are you selling to? Describe the smallest cohesive group that is in the greatest need for your product. List 3 different groups of potential customers</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="customer-segment-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="customer-segment-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>SOLUTION</strong><br>
+                    <span class="question-text">How is the product solving the problem?<br>
+                    What will the benefit to the user be?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="solution-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="solution-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>PROBLEM</strong><br>
+                    <span class="question-text">What problem is the pain causing?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="problem-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="problem-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>PAIN SCALE</strong><br>
+                    <span class="question-text">On a scale from death to mild inconvenience, how<br>
+                    would you categorize the impact of the pain?</span>
+                </div>
+                <div class="input-container">
+                    <select id="pain-scale-what" class="pain-scale-select">
+                        <option value="">Select pain level...</option>
+                        <option value="Annoyance">Annoyance</option>
+                        <option value="Small">Small</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Major">Major</option>
+                        <option value="Requirement">Requirement</option>
+                    </select>
+                </div>
+                <div class="input-container">
+                    <textarea id="pain-scale-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>PRODUCT</strong><br>
+                    <span class="question-text">What is it? What are you selling?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="product-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="product-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>REQUIREMENTS</strong><br>
+                    <span class="question-text">What are the design constraints and requirements?<br>
+                    What does a successful product need to be or do?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="requirements-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="requirements-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>DESIGN</strong><br>
+                    <span class="question-text">What is the product description<br>
+                    that falls within the requirements?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="design-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="design-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>INTEGRATIONS</strong><br>
+                    <span class="question-text">What components/parts are in the design solution?<br>
+                    What do they do?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="integrations-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="integrations-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+
+            <div class="question-row">
+                <div class="question-label">
+                    <strong>PRODUCTION</strong><br>
+                    <span class="question-text">What platforms/systems do the components use?<br>
+                    How do you make the components work?</span>
+                </div>
+                <div class="input-container">
+                    <textarea id="production-what" placeholder="This is placeholder text."></textarea>
+                </div>
+                <div class="input-container">
+                    <textarea id="production-how" placeholder="This is placeholder text."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="credits">
+            <p>Monty Sharma and Maia Schlussel 2025</p>
+        </div>
+
+        <div class="button-container">
+            <button id="export-md-btn" onclick="exportAsMarkdown()">Export as Markdown</button>
+            <button id="export-pdf-btn" onclick="exportAsPDF()">Export as PDF</button>
+            <button id="export-txt-btn" onclick="exportAsText()">Save File</button>
+            <button id="import-btn" onclick="importFile()">Load File</button>
+            <button id="clear-btn" onclick="clearData()">Clear All</button>
+            <input type="file" id="file-input" accept=".json,.txt" style="display: none;" onchange="handleFileImport(event)">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

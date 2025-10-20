@@ -1,0 +1,612 @@
+<!-- Path: stack-snapshot-comparison.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Snapshot Framework Comparison</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .controls {
+            margin-bottom: 20px;
+            display: flex !important;
+            align-items: center;
+            gap: 15px;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        .controls label {
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+        }
+        .controls select {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            min-width: 250px;
+        }
+        .controls select:hover {
+            border-color: #4CAF50;
+        }
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+        .view-toggle button {
+            padding: 8px 16px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .view-toggle button:hover {
+            background-color: #f0f0f0;
+        }
+        .view-toggle button.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 1200px;
+        }
+        table.single-view {
+            min-width: 600px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            text-align: left;
+            padding: 12px;
+            border: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            vertical-align: top;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .layer-name {
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+        .description {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+        .new-layer {
+            background-color: #e8f5e9;
+        }
+        .modified-layer {
+            background-color: #fff3cd;
+        }
+        .note {
+            font-style: italic;
+            color: #888;
+            font-size: 13px;
+        }
+        .column-original,
+        .column-biotech,
+        .column-hardware,
+        .column-fintech {
+            display: table-cell;
+        }
+        @media print {
+            body {
+                margin: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stack Snapshot Framework Comparison</h1>
+
+        <div class="controls">
+            <label for="model-select">Select Model:</label>
+            <select id="model-select" onchange="switchModel()">
+                <option value="all">All Models (Comparison View)</option>
+                <option value="original">Original (Software)</option>
+                <option value="biotech">Biotech</option>
+                <option value="hardware">Consumer Hardware</option>
+                <option value="fintech">Fintech</option>
+            </select>
+
+            <div class="view-toggle">
+                <button id="comparison-btn" class="active" onclick="setViewMode('comparison')">Comparison</button>
+                <button id="single-btn" onclick="setViewMode('single')">Single Model</button>
+            </div>
+        </div>
+
+        <table id="framework-table">
+            <thead>
+                <tr>
+                    <th>Layer Order</th>
+                    <th class="column-original">Original (Software)</th>
+                    <th class="column-biotech">Biotech</th>
+                    <th class="column-hardware">Consumer Hardware</th>
+                    <th class="column-fintech">Fintech</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="column-original">
+                        <div class="layer-name">WORLD IMPACT</div>
+                        <div class="description">What is the global impact? When you exit, what lasting impact have you made?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">WORLD IMPACT</div>
+                        <div class="description">What is the global health impact? How many lives improved/saved? What diseases eliminated?</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">WORLD IMPACT</div>
+                        <div class="description">What is the global impact? How does this change daily life at scale?</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">WORLD IMPACT</div>
+                        <div class="description">What is the global financial inclusion impact? How many unbanked/underbanked served?</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="column-original">
+                        <div class="layer-name">EXIT</div>
+                        <div class="description">What is the end goal of the company? Will you go public, be acquired, license, etc.?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">EXIT</div>
+                        <div class="description">IPO, acquisition by pharma, licensing deals, or platform company? Consider typical 10-15 year timeline</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">EXIT</div>
+                        <div class="description">What is the end goal? Acquisition by tech giant, IPO, or become category leader?</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">EXIT</div>
+                        <div class="description">Banking license acquisition, IPO, acquisition by traditional bank, or new financial infrastructure?</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="column-original">
+                        <div class="layer-name">SECTOR MAPPING</div>
+                        <div class="description">Describe the relationship between players in the industry 2 degrees from where you expect to be? How will they respond?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">SECTOR MAPPING</div>
+                        <div class="description">Map pharma companies, biotech peers, CROs, hospitals, insurers. How will big pharma respond?</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">SECTOR MAPPING</div>
+                        <div class="description">Map manufacturers, distributors, retailers, complementary products. How will incumbents respond?</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">SECTOR MAPPING</div>
+                        <div class="description">Map banks, payment processors, regulators, tech companies. How will traditional finance respond?</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="column-original">
+                        <div class="layer-name">COMPETITIVE MARKET</div>
+                        <div class="description">Who are the competitors that sell the same/similar products? What do the users do now?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">COMPETITIVE MARKET</div>
+                        <div class="description">Competing drugs/therapies, clinical trials, standard of care. What treatments exist now?</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">COMPETITIVE MARKET</div>
+                        <div class="description">Direct competitors, substitute products, DIY solutions. What do consumers use now?</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">COMPETITIVE MARKET</div>
+                        <div class="description">Fintechs, traditional banks, credit unions, informal financial services. Include regulatory advantages</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td class="column-original">
+                        <div class="layer-name">MARKET EXPANSION</div>
+                        <div class="description">What are follow-on or complementary products your company can offer? Where do you go from here?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">MARKET EXPANSION</div>
+                        <div class="description">Indication expansion, combination therapies, platform applications, geographic expansion</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">MARKET EXPANSION</div>
+                        <div class="description">Product line extensions, ecosystem products, service offerings, subscription models</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">MARKET EXPANSION</div>
+                        <div class="description">Additional financial products, geographic expansion, embedded finance opportunities</div>
+                    </td>
+                </tr>
+                <tr class="new-layer">
+                    <td>6</td>
+                    <td class="column-original note">—</td>
+                    <td class="column-biotech">
+                        <div class="layer-name">IP/PATENT STRATEGY</div>
+                        <div class="description">Patent landscape, freedom to operate, trade secrets, defensive publications</div>
+                    </td>
+                    <td class="column-hardware note">—</td>
+                    <td class="column-fintech">
+                        <div class="layer-name">PARTNERSHIPS</div>
+                        <div class="description">Banking partners, payment processors, data providers, compliance vendors</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td class="column-original">
+                        <div class="layer-name">COMPANY</div>
+                        <div class="description">What size and type of company would be needed to support the business model?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">COMPANY</div>
+                        <div class="description">R&D heavy organization, clinical operations, regulatory expertise, commercial capabilities</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">COMPANY</div>
+                        <div class="description">Hardware engineering, supply chain expertise, retail/marketing capabilities</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">COMPANY</div>
+                        <div class="description">Tech talent, compliance team, risk management, customer support at scale</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td class="column-original">
+                        <div class="layer-name">BUSINESS MODEL</div>
+                        <div class="description">How will this make money? How will customers pay for it?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">BUSINESS MODEL</div>
+                        <div class="description">Drug sales, licensing, milestones, royalties. Reimbursement strategy critical</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">BUSINESS MODEL</div>
+                        <div class="description">Hardware sales, recurring revenue (services/subscriptions), ecosystem lock-in</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">BUSINESS MODEL</div>
+                        <div class="description">Transaction fees, subscription, interchange, interest/float, data monetization</div>
+                    </td>
+                </tr>
+                <tr class="new-layer">
+                    <td>9</td>
+                    <td class="column-original note">—</td>
+                    <td class="column-biotech">
+                        <div class="layer-name">REGULATORY PATHWAY</div>
+                        <div class="description">FDA approval strategy, clinical trial phases, regulatory milestones, global approvals</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">RETAIL/DISTRIBUTION</div>
+                        <div class="description">Channel strategy (D2C, retail, online), inventory management, fulfillment</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">REGULATORY COMPLIANCE</div>
+                        <div class="description">Licenses needed, KYC/AML procedures, data privacy (GDPR/CCPA), ongoing compliance</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td class="column-original">
+                        <div class="layer-name">CUSTOMER SEGMENT</div>
+                        <div class="description">Define and describe the target customers. Who are you selling to?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">CUSTOMER SEGMENT</div>
+                        <div class="description">Patients (by indication), physicians, payers/insurers, hospitals/clinics</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">CUSTOMER SEGMENT</div>
+                        <div class="description">Early adopters, mass market segments, demographic/psychographic profiles</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">CUSTOMER SEGMENT</div>
+                        <div class="description">Underbanked segments, SMBs, specific demographics, geographic markets</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td class="column-original">
+                        <div class="layer-name">SOLUTION</div>
+                        <div class="description">How is the product solving the problem? What will the benefit to the user be?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">SOLUTION</div>
+                        <div class="description">Mechanism of action, clinical benefits, quality of life improvements, survival benefit</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">SOLUTION</div>
+                        <div class="description">How the product solves the problem, user experience benefits, lifestyle improvement</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">SOLUTION</div>
+                        <div class="description">How it improves financial access/efficiency, user benefits, cost savings</div>
+                    </td>
+                </tr>
+                <tr class="new-layer">
+                    <td>12</td>
+                    <td class="column-original note">—</td>
+                    <td class="column-biotech note">—</td>
+                    <td class="column-hardware note">—</td>
+                    <td class="column-fintech">
+                        <div class="layer-name">TRUST & SECURITY</div>
+                        <div class="description">Security infrastructure, fraud prevention, customer fund protection, compliance</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td class="column-original">
+                        <div class="layer-name">PROBLEM</div>
+                        <div class="description">What problem is the pain causing?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">PROBLEM</div>
+                        <div class="description">Disease state, unmet medical need, treatment gaps, quality of life issues</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">PROBLEM</div>
+                        <div class="description">What problem is the pain causing? Inefficiency, inconvenience, or impossibility?</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">PROBLEM</div>
+                        <div class="description">Financial exclusion, inefficiency, high costs, poor user experience</div>
+                    </td>
+                </tr>
+                <tr class="modified-layer">
+                    <td>14</td>
+                    <td class="column-original">
+                        <div class="layer-name">PAIN SCALE</div>
+                        <div class="description">On a scale from death to mild inconvenience, how would you categorize the impact of the pain?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">PAIN SCALE</div>
+                        <div class="description">Mortality/morbidity impact, patient population size, current treatment satisfaction</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">PAIN SCALE</div>
+                        <div class="description">Frequency of pain, cost of current solution, time wasted, safety concerns</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">PAIN SCALE</div>
+                        <div class="description">Financial impact, frequency of pain point, current alternative costs</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td class="column-original">
+                        <div class="layer-name">PRODUCT</div>
+                        <div class="description">What is it? What are you selling?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">PRODUCT</div>
+                        <div class="description">Drug/device/diagnostic, formulation, delivery method, combination product?</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">PRODUCT</div>
+                        <div class="description">Physical product description, key features, form factor, price point</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">PRODUCT</div>
+                        <div class="description">Financial product/service, key features, pricing, accessibility</div>
+                    </td>
+                </tr>
+                <tr class="modified-layer">
+                    <td>16</td>
+                    <td class="column-original">
+                        <div class="layer-name">REQUIREMENTS</div>
+                        <div class="description">What are the design constraints and requirements? What does a successful product need to be or do?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">REQUIREMENTS</div>
+                        <div class="description">Efficacy targets, safety profile, delivery constraints, stability, manufacturing feasibility</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">REQUIREMENTS</div>
+                        <div class="description">Performance specs, certifications (FCC, CE, safety), cost targets, user experience</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">REQUIREMENTS</div>
+                        <div class="description">Regulatory requirements, security standards, uptime, transaction speed, accuracy</div>
+                    </td>
+                </tr>
+                <tr class="modified-layer">
+                    <td>17</td>
+                    <td class="column-original">
+                        <div class="layer-name">DESIGN</div>
+                        <div class="description">What is the product description that falls within the requirements?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">DESIGN</div>
+                        <div class="description">Molecular design, formulation, delivery system, dosing regimen</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">DESIGN</div>
+                        <div class="description">Industrial design, user experience, aesthetic, ergonomics, packaging</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">DESIGN</div>
+                        <div class="description">User interface, API design, integration architecture, mobile/web experience</div>
+                    </td>
+                </tr>
+                <tr class="modified-layer">
+                    <td>18</td>
+                    <td class="column-original">
+                        <div class="layer-name">INTEGRATIONS</div>
+                        <div class="description">What components/parts are in the design solution? What do they do?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">PARTNERSHIPS</div>
+                        <div class="description">CROs, CMOs, academic collaborations, clinical sites, patient advocacy groups</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">INTEGRATIONS</div>
+                        <div class="description">Ecosystem compatibility (Apple, Google, Amazon), smart home, companion apps</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">INTEGRATIONS</div>
+                        <div class="description">Banking APIs, payment rails, identity verification, credit bureaus, accounting software</div>
+                    </td>
+                </tr>
+                <tr class="new-layer">
+                    <td>19</td>
+                    <td class="column-original note">—</td>
+                    <td class="column-biotech note">—</td>
+                    <td class="column-hardware">
+                        <div class="layer-name">SUPPLY CHAIN</div>
+                        <div class="description">Component sourcing, manufacturing partners, logistics, cost reduction roadmap</div>
+                    </td>
+                    <td class="column-fintech note">—</td>
+                </tr>
+                <tr class="modified-layer">
+                    <td>20</td>
+                    <td class="column-original">
+                        <div class="layer-name">PRODUCTION</div>
+                        <div class="description">What platforms/systems do the components use? How do you make the components work?</div>
+                    </td>
+                    <td class="column-biotech">
+                        <div class="layer-name">SCIENTIFIC VALIDATION</div>
+                        <div class="description">Proof of concept, preclinical data, clinical endpoints, biomarkers, real-world evidence</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">PRODUCTION</div>
+                        <div class="description">Manufacturing process, scale-up strategy, quality control, unit economics</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">PRODUCTION</div>
+                        <div class="description">Tech stack, infrastructure, deployment, scalability, disaster recovery</div>
+                    </td>
+                </tr>
+                <tr class="new-layer">
+                    <td>21</td>
+                    <td class="column-original note">—</td>
+                    <td class="column-biotech">
+                        <div class="layer-name">RISK ASSESSMENT</div>
+                        <div class="description">Clinical trial failure, regulatory rejection, IP challenges, reimbursement risk</div>
+                    </td>
+                    <td class="column-hardware">
+                        <div class="layer-name">RISK ASSESSMENT</div>
+                        <div class="description">Supply chain disruption, manufacturing defects, market adoption, competition</div>
+                    </td>
+                    <td class="column-fintech">
+                        <div class="layer-name">RISK ASSESSMENT</div>
+                        <div class="description">Regulatory changes, security breaches, compliance failures, partner dependencies</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-top: 20px;">
+            <p class="note">Legend: <span style="background-color: #e8f5e9; padding: 2px 6px;">New Layer</span> <span style="background-color: #fff3cd; padding: 2px 6px;">Modified Layer</span></p>
+        </div>
+    </div>
+
+    <script>
+        let currentView = 'comparison';
+
+        function switchModel() {
+            const select = document.getElementById('model-select');
+            const selectedModel = select.value;
+
+            if (selectedModel === 'all') {
+                // Show all columns
+                showAllColumns();
+                setViewMode('comparison');
+            } else {
+                // Show only selected column
+                hideAllColumns();
+                showColumn(selectedModel);
+                setViewMode('single');
+            }
+        }
+
+        function setViewMode(mode) {
+            currentView = mode;
+            const select = document.getElementById('model-select');
+            const comparisonBtn = document.getElementById('comparison-btn');
+            const singleBtn = document.getElementById('single-btn');
+            const table = document.getElementById('framework-table');
+
+            if (mode === 'comparison') {
+                comparisonBtn.classList.add('active');
+                singleBtn.classList.remove('active');
+                select.value = 'all';
+                showAllColumns();
+                table.classList.remove('single-view');
+            } else {
+                comparisonBtn.classList.remove('active');
+                singleBtn.classList.add('active');
+                if (select.value === 'all') {
+                    select.value = 'original';
+                }
+                hideAllColumns();
+                showColumn(select.value);
+                table.classList.add('single-view');
+            }
+        }
+
+        function hideAllColumns() {
+            const columns = ['original', 'biotech', 'hardware', 'fintech'];
+            columns.forEach(col => {
+                const elements = document.querySelectorAll('.column-' + col);
+                elements.forEach(el => el.style.display = 'none');
+            });
+        }
+
+        function showAllColumns() {
+            const columns = ['original', 'biotech', 'hardware', 'fintech'];
+            columns.forEach(col => {
+                const elements = document.querySelectorAll('.column-' + col);
+                elements.forEach(el => el.style.display = 'table-cell');
+            });
+        }
+
+        function showColumn(columnName) {
+            const elements = document.querySelectorAll('.column-' + columnName);
+            elements.forEach(el => el.style.display = 'table-cell');
+        }
+    </script>
+</body>
+</html>
